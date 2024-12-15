@@ -63,8 +63,8 @@ namespace WitsmlExplorer.Api.Services
                     Mnemonics = log.LogCurveInfo.Count,
                     CommonData = new CommonData()
                     {
-                        DTimCreation = log.CommonData.DTimCreation,
-                        DTimLastChange = log.CommonData.DTimLastChange,
+                        DTimCreation = log.CommonData?.DTimCreation,
+                        DTimLastChange = log.CommonData?.DTimLastChange,
                     }
                 }).OrderBy(log => log.Name).ToList();
         }
@@ -101,8 +101,8 @@ namespace WitsmlExplorer.Api.Services
                 Mnemonics = witsmlLog.LogCurveInfo.Count,
                 CommonData = new()
                 {
-                    DTimCreation = witsmlLog.CommonData.DTimCreation,
-                    DTimLastChange = witsmlLog.CommonData.DTimLastChange,
+                    DTimCreation = witsmlLog.CommonData?.DTimCreation,
+                    DTimLastChange = witsmlLog.CommonData?.DTimLastChange,
                 }
             };
             if (string.IsNullOrEmpty(witsmlLog.IndexType))
