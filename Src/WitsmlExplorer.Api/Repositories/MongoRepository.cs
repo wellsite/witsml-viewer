@@ -40,6 +40,14 @@ namespace WitsmlExplorer.Api.Repositories
             return documents.ToList<TDocument>();
         }
 
+        public async Task<ICollection<TDocument>> GetDocumentsAsync(string email)
+        {
+            
+            var filter = Builders<TDocument>.Filter.Eq("email", email);            
+            var documents = await _collection.FindAsync(filter);            
+            return documents.ToList();
+        }
+
         public async Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document)
         {
             var filter = Builders<TDocument>.Filter.Eq("_id", id);

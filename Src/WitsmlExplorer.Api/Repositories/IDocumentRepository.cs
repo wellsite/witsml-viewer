@@ -8,6 +8,7 @@ namespace WitsmlExplorer.Api.Repositories
     {
         Task<TDocument> GetDocumentAsync(TDocumentId id);
         Task<ICollection<TDocument>> GetDocumentsAsync();
+        Task<ICollection<TDocument>> GetDocumentsAsync(string email);
         Task<TDocument> CreateDocumentAsync(TDocument document);
         Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document);
         Task DeleteDocumentAsync(TDocumentId id);

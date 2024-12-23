@@ -59,6 +59,26 @@ namespace WitsmlExplorer.Api.Repositories
 
             return results;
         }
+    public async Task<ICollection<TDocument>> GetDocumentsAsync(string email)
+{
+    var container = _cosmosClient.GetContainer(_dbName, _containerId);
+
+    // Modify the query to filter based on the email
+    var queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.email = @Email")
+        .WithParameter("@Email", email);
+
+    var results = new List<TDocument>();
+    var iterator = container.GetItemQueryIterator<TDocument>(queryDefinition);
+
+    // Iterate through the query results and collect them
+    while (iterator.HasMoreResults)
+    {
+        var response = await iterator.ReadNextAsync();
+        results.AddRange(response);
+    }
+
+    return results;
+}
 
         public async Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document)
         {
