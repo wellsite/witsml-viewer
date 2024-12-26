@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Text;
 
 using Serilog;
 
@@ -19,6 +20,8 @@ public abstract class WitsmlClientBase
             ? CreateBasicBinding(options.RequestTimeOut)
             : CreateCertificateAndBasicBinding();
 
+        //  Binding serviceBinding = CreateBinding(options);
+
         var client = new StoreSoapPortClient(serviceBinding, endpointAddress);
         client.ClientCredentials.UserName.UserName = options.Credentials.Username;
         client.ClientCredentials.UserName.Password = options.Credentials.Password;
@@ -31,9 +34,18 @@ public abstract class WitsmlClientBase
                 Log.Warning("Configured client certificate does not contain a private key");
         }
 
-        client.Endpoint.EndpointBehaviors.Add(new EndpointBehavior());
+        var authHeaderValue = GenerateBasicAuthHeader(options.Credentials.Username, options.Credentials.Password);
+        client.Endpoint.EndpointBehaviors.Add(new EndpointBehavior(authHeaderValue));
 
         return client;
+    }
+
+    private static string GenerateBasicAuthHeader(string username, string password)
+    {
+        var authValue = $"{username}:{password}";
+        var authBytes = Encoding.ASCII.GetBytes(authValue);
+        var base64Auth = Convert.ToBase64String(authBytes);
+        return $"Basic {base64Auth}";
     }
 
     private static BasicHttpsBinding CreateBasicBinding(TimeSpan requestTimeout)
@@ -70,6 +82,42 @@ public abstract class WitsmlClientBase
                     MaxReceivedMessageSize = int.MaxValue
                 }
             }
+        };
+    }
+
+    private static Binding CreateBinding(WitsmlClientOptions options)
+    {
+        Uri uri = new(options.Hostname);
+
+        if (uri.Scheme == "http")
+        {
+            return CreateBasicHttpBinding(options.RequestTimeOut);
+        }
+        else if (uri.Scheme == "https" && options.ClientCertificate == null)
+        {
+            return CreateBasicBinding(options.RequestTimeOut);
+        }
+        else if (uri.Scheme == "https" && options.ClientCertificate != null)
+        {
+            return CreateCertificateAndBasicBinding();
+        }
+        throw new NotSupportedException($"No binding supported for the client options '{options}'.");
+    }
+
+    private static BasicHttpBinding CreateBasicHttpBinding(TimeSpan requestTimeout)
+    {
+        return new BasicHttpBinding
+        {
+            Security =
+            {
+                Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                Transport =
+                {
+                    ClientCredentialType = HttpClientCredentialType.Basic
+                }
+            },
+            MaxReceivedMessageSize = int.MaxValue,
+            SendTimeout = requestTimeout
         };
     }
 }

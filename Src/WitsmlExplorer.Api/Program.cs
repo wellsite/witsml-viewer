@@ -35,6 +35,11 @@ else
             .AddEnvironmentVariables();
 }
 
+System.Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", builder.Configuration[ConfigConstants.AzureClientID]);
+System.Environment.SetEnvironmentVariable("AZURE_TENANT_ID", builder.Configuration[ConfigConstants.AzureTenantID]);
+System.Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", builder.Configuration[ConfigConstants.AzureClientSecret]);
+
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Startup>();
