@@ -102,5 +102,9 @@ namespace WitsmlExplorer.Api.Repositories
                 throw new RepositoryException($"Unable to delete document with id: {id}", (int)deleteResponse.StatusCode);
             }
         }
+          public async Task DeleteDocumentAsync(string email)
+        {
+            
+        }
     }
 }

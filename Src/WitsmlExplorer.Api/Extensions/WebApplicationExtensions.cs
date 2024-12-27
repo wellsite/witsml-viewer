@@ -35,6 +35,7 @@ namespace WitsmlExplorer.Api.Extensions
                 routeHandlerBuilder.RequireAuthorization(policyNames);
             }
         }
+
         public static void MapDelete(this IEndpointRouteBuilder endpoints, string pattern, Delegate handler, bool useOAuth2, params string[] policyNames)
         {
             var routeHandlerBuilder = endpoints.MapDelete(ApiPath + pattern, handler);

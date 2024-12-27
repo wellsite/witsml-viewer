@@ -66,5 +66,11 @@ namespace WitsmlExplorer.Api.Repositories
             var filter = Builders<TDocument>.Filter.Eq("_id", id);
             await _collection.FindOneAndDeleteAsync(filter);
         }
+        
+        public async Task DeleteDocumentAsync(string email)
+        {
+            var filter = Builders<TDocument>.Filter.Eq("email", email);
+            await _collection.FindOneAndDeleteAsync(filter);
+        }
     }
 }

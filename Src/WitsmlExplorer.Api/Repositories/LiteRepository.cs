@@ -58,5 +58,10 @@ namespace WitsmlExplorer.Api.Repositories
             _collection.Delete(new BsonValue(id));
             return Task.CompletedTask;
         }
+       public Task DeleteDocumentAsync(string email)
+        {
+            _collection.Delete(new BsonValue(email));
+            return Task.CompletedTask;
+        }
     }
 }
