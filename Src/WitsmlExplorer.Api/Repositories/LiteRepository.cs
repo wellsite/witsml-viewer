@@ -35,11 +35,11 @@ namespace WitsmlExplorer.Api.Repositories
             var documents = _collection.FindAll();
             return Task.FromResult<ICollection<TDocument>>(new List<TDocument>(documents));
         }
-       public Task<ICollection<TDocument>> GetDocumentsAsync(string email)
-       {
+        public Task<ICollection<TDocument>> GetDocumentsAsync(string email)
+        {
             var documents = _collection.FindAll();
             return Task.FromResult<ICollection<TDocument>>(new List<TDocument>(documents));
-       }
+        }
 
         public Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document)
         {

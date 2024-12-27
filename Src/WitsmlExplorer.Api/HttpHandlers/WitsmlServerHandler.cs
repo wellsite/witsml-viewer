@@ -37,11 +37,11 @@ namespace WitsmlExplorer.Api.HttpHandlers
         }
 
         [Produces(typeof(Server))]
-        public static async Task<IResult> CreateWitsmlServer(Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository,HttpContext httpContext, ICredentialsService credentialsService)
+        public static async Task<IResult> CreateWitsmlServer(Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository, HttpContext httpContext, ICredentialsService credentialsService)
         {
             EssentialHeaders httpHeaders = new(httpContext?.Request);
-            string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email"); 
-            witsmlServer.Email = email;           
+            string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+            witsmlServer.Email = email;
             Server inserted = await witsmlServerRepository.CreateDocumentAsync(witsmlServer);
             return TypedResults.Ok(inserted);
         }

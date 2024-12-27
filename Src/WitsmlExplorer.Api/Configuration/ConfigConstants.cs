@@ -8,5 +8,8 @@ namespace WitsmlExplorer.Api.Configuration
         public static readonly string LogQueries = "LogQueries";
         public static readonly string NotificationsKey = "NotificationsKey";
         public static readonly string IsDesktopApp = "IsDesktopApp";
+        public static readonly string AzureClientID = "AzureClientID";
+        public static readonly string AzureTenantID = "AzureTenantID";
+        public static readonly string AzureClientSecret = "AzureClientSecret";
     }
 }
