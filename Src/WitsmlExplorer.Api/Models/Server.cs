@@ -28,6 +28,9 @@ namespace WitsmlExplorer.Api.Models
         [JsonPropertyName("isPriority")]
         public bool IsPriority { get; init; }
 
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

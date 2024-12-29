@@ -35,6 +35,11 @@ namespace WitsmlExplorer.Api.Repositories
             var documents = _collection.FindAll();
             return Task.FromResult<ICollection<TDocument>>(new List<TDocument>(documents));
         }
+        public Task<ICollection<TDocument>> GetDocumentsAsync(string email)
+        {
+            var documents = _collection.FindAll();
+            return Task.FromResult<ICollection<TDocument>>(new List<TDocument>(documents));
+        }
 
         public Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document)
         {
@@ -51,6 +56,11 @@ namespace WitsmlExplorer.Api.Repositories
         public Task DeleteDocumentAsync(TDocumentId id)
         {
             _collection.Delete(new BsonValue(id));
+            return Task.CompletedTask;
+        }
+       public Task DeleteDocumentAsync(string email)
+        {
+            _collection.Delete(new BsonValue(email));
             return Task.CompletedTask;
         }
     }

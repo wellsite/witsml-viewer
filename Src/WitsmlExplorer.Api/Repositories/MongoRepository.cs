@@ -40,6 +40,13 @@ namespace WitsmlExplorer.Api.Repositories
             return documents.ToList<TDocument>();
         }
 
+        public async Task<ICollection<TDocument>> GetDocumentsAsync(string email)
+        {
+            var filter = Builders<TDocument>.Filter.Eq("Email", email);
+            var documents = await _collection.FindAsync(filter);
+            return documents.ToList();
+        }
+
         public async Task<TDocument> UpdateDocumentAsync(TDocumentId id, TDocument document)
         {
             var filter = Builders<TDocument>.Filter.Eq("_id", id);
@@ -56,6 +63,12 @@ namespace WitsmlExplorer.Api.Repositories
         public async Task DeleteDocumentAsync(TDocumentId id)
         {
             var filter = Builders<TDocument>.Filter.Eq("_id", id);
+            await _collection.FindOneAndDeleteAsync(filter);
+        }
+        
+        public async Task DeleteDocumentAsync(string email)
+        {
+            var filter = Builders<TDocument>.Filter.Eq("email", email);
             await _collection.FindOneAndDeleteAsync(filter);
         }
     }

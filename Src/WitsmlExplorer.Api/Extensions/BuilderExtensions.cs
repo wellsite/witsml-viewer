@@ -38,5 +38,6 @@ namespace WitsmlExplorer.Api.Extensions
         public const string ADMIN = "admin";
         public const string DEVELOPER = "developer";
         public const string ADMINORDEVELOPER = "admin_or_developer";
+        public const string User = "user";
     }
 }

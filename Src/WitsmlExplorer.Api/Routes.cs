@@ -19,9 +19,9 @@ namespace WitsmlExplorer.Api
             bool useOAuth2 = StringHelpers.ToBoolean(configuration[ConfigConstants.OAuth2Enabled]);
 
             app.MapGet("/witsml-servers", WitsmlServerHandler.GetWitsmlServers, useOAuth2);
-            app.MapPost("/witsml-servers", WitsmlServerHandler.CreateWitsmlServer, useOAuth2, AuthorizationPolicyRoles.ADMIN);
+            app.MapPost("/witsml-servers", WitsmlServerHandler.CreateWitsmlServer, useOAuth2);
             app.MapPatch("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.UpdateWitsmlServer, useOAuth2, AuthorizationPolicyRoles.ADMIN);
-            app.MapDelete("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.DeleteWitsmlServer, useOAuth2, AuthorizationPolicyRoles.ADMIN);
+            app.MapDelete("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.DeleteWitsmlServer, useOAuth2);
 
             app.MapGet("/capabilities", CapHandler.GetCap, useOAuth2);
 

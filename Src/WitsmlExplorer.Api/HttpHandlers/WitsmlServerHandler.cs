@@ -17,8 +17,17 @@ namespace WitsmlExplorer.Api.HttpHandlers
         [Produces(typeof(IEnumerable<Connection>))]
         public static async Task<IResult> GetWitsmlServers([FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository, HttpContext httpContext, ICredentialsService credentialsService)
         {
+            IEnumerable<Server> servers;
+            //if user give all server else existing flow
             EssentialHeaders httpHeaders = new(httpContext?.Request);
-            IEnumerable<Server> servers = await witsmlServerRepository.GetDocumentsAsync();
+            string roles = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "roles");
+            if (roles.Contains("user")){
+                servers = await witsmlServerRepository.GetDocumentsAsync();         
+            }else{
+               string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+               servers = await witsmlServerRepository.GetDocumentsAsync(email);
+            }
+
             IEnumerable<Connection> credentials = await Task.WhenAll(servers.Select(async (server) =>
                 new Connection(server)
                 {
@@ -28,24 +37,49 @@ namespace WitsmlExplorer.Api.HttpHandlers
         }
 
         [Produces(typeof(Server))]
-        public static async Task<IResult> CreateWitsmlServer(Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository)
+        public static async Task<IResult> CreateWitsmlServer(Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository, HttpContext httpContext, ICredentialsService credentialsService)
         {
+            EssentialHeaders httpHeaders = new(httpContext?.Request);
+            string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+            witsmlServer.Email = email;
             Server inserted = await witsmlServerRepository.CreateDocumentAsync(witsmlServer);
             return TypedResults.Ok(inserted);
         }
 
         [Produces(typeof(Server))]
-        public static async Task<IResult> UpdateWitsmlServer(Guid witsmlServerId, Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository)
-        {
-            Server updatedServer = await witsmlServerRepository.UpdateDocumentAsync(witsmlServerId, witsmlServer);
-            return TypedResults.Ok(updatedServer);
+        public static async Task<IResult> UpdateWitsmlServer(Guid witsmlServerId, Server witsmlServer, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository,HttpContext httpContext, ICredentialsService credentialsService)
+        {    
+            EssentialHeaders httpHeaders = new(httpContext?.Request);
+             string roles = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "roles");
+            if (roles.Contains("user")){
+                 Server updatedServer = await witsmlServerRepository.UpdateDocumentAsync(witsmlServerId, witsmlServer);
+                 return TypedResults.Ok(updatedServer);      
+            }else{
+               string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+               if (email == witsmlServer.Email) {
+                 Server updatedServer = await witsmlServerRepository.UpdateDocumentAsync(witsmlServerId, witsmlServer);
+                 return TypedResults.Ok(updatedServer);  
+               }               
+            }
+            return TypedResults.Ok();           
+
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public static async Task<IResult> DeleteWitsmlServer(Guid witsmlServerId, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository)
+        public static async Task<IResult> DeleteWitsmlServer(Guid witsmlServerId, [FromServices] IDocumentRepository<Server, Guid> witsmlServerRepository,HttpContext httpContext, ICredentialsService credentialsService)
         {
+ 
+             EssentialHeaders httpHeaders = new(httpContext?.Request);
+             string roles = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "roles");
+            if (roles.Contains("user")){
             await witsmlServerRepository.DeleteDocumentAsync(witsmlServerId);
-            return TypedResults.NoContent();
+            return TypedResults.NoContent();      
+            }else{
+               string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+               await witsmlServerRepository.DeleteDocumentAsync(email);
+              return TypedResults.NoContent();  
+               }               
+            }
         }
     }
-}
+
