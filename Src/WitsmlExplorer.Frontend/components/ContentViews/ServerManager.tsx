@@ -26,7 +26,7 @@ import { getServersQueryKey, useGetServers } from "hooks/query/useGetServers";
 import { useOperationState } from "hooks/useOperationState";
 import { useServerFilter } from "hooks/useServerFilter";
 import { emptyServer, Server } from "models/server";
-import { adminRole, getUserAppRoles, msalEnabled } from "msal/MsalAuthProvider";
+import { adminRole, getUserAppRoles, msalEnabled, userRole } from "msal/MsalAuthProvider";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getWellsViewPath } from "routes/utils/pathBuilder";
@@ -54,7 +54,7 @@ const ServerManager = (): React.ReactElement => {
     operationState: { colors, theme },
     dispatchOperation
   } = useOperationState();
-  const editDisabled = msalEnabled && !getUserAppRoles().includes(adminRole);
+  const editDisabled = msalEnabled && !getUserAppRoles().includes(adminRole) && !getUserAppRoles().includes(userRole);
   const navigate = useNavigate();
   const { connectedServer, setConnectedServer } = useConnectedServer();
   const { dispatchLoggedInUsernames } = useLoggedInUsernames();
@@ -363,7 +363,7 @@ const ConnectButton = ({ isConnected, ...props }: ConnectButtonProps) => {
   );
 };
 
-const StyledConnectButton = styled(Button)<{
+const StyledConnectButton = styled(Button) <{
   isConnected: boolean;
   colors: Colors;
 }>`
@@ -389,7 +389,7 @@ const StyledConnectButton = styled(Button)<{
   }
 `;
 
-const StyledTableBody = styled(Table.Body)<{ colors: Colors }>`
+const StyledTableBody = styled(Table.Body) <{ colors: Colors }>`
   tr:nth-child(even) {
     background-color: ${(props) => props.colors.ui.backgroundLight};
   }

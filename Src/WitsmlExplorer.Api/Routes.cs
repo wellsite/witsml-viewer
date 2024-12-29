@@ -20,7 +20,7 @@ namespace WitsmlExplorer.Api
 
             app.MapGet("/witsml-servers", WitsmlServerHandler.GetWitsmlServers, useOAuth2);
             app.MapPost("/witsml-servers", WitsmlServerHandler.CreateWitsmlServer, useOAuth2);
-            app.MapPatch("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.UpdateWitsmlServer, useOAuth2, AuthorizationPolicyRoles.ADMIN);
+            app.MapPatch("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.UpdateWitsmlServer, useOAuth2);
             app.MapDelete("/witsml-servers/{witsmlServerId}", WitsmlServerHandler.DeleteWitsmlServer, useOAuth2);
 
             app.MapGet("/capabilities", CapHandler.GetCap, useOAuth2);

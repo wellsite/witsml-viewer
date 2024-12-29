@@ -15,13 +15,13 @@ export const authRequest: RedirectRequest = {
 export const msalEnabled = import.meta.env.VITE_MSALENABLED;
 
 export const adminRole = "admin";
+export const userRole = "user";
 export const developerRole = "developer";
 
 const msalConfig: Configuration = {
   auth: {
-    authority: `https://login.microsoftonline.com/${
-      import.meta.env.VITE_AZURE_AD_TENANT_ID
-    }`,
+    authority: `https://login.microsoftonline.com/${import.meta.env.VITE_AZURE_AD_TENANT_ID
+      }`,
     clientId: import.meta.env.VITE_AZURE_AD_CLIENT_ID,
     redirectUri: `${import.meta.env.VITE_AZURE_AD_URL_WITSMLEXPLORER}`
   },

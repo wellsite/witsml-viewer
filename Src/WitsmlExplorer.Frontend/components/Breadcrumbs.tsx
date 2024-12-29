@@ -140,7 +140,7 @@ export function Breadcrumbs() {
     <BreadcrumbsContainer>
       <StyledNavLink to={"/"}>
         <Title style={{ color: colors.infographic.primaryMossGreen }}>
-          WITSML Explorer
+          Wellsite WITSML Viewer
         </Title>
       </StyledNavLink>
       {breadcrumbContent.length !== 0 && (
@@ -184,12 +184,12 @@ const getServerCrumb = (
 ) => {
   return server
     ? {
-        name: server.name,
-        onClick: () => {
-          if (isWellsView) return;
-          navigate(getWellsViewPath(server.url));
-        }
+      name: server.name,
+      onClick: () => {
+        if (isWellsView) return;
+        navigate(getWellsViewPath(server.url));
       }
+    }
     : {};
 };
 
@@ -201,12 +201,12 @@ const getWellCrumb = (
 ) => {
   return serverUrl && well
     ? {
-        name: well.name,
-        onClick: () => {
-          if (isWellboresView) return;
-          navigate(getWellboresViewPath(serverUrl, well.uid));
-        }
+      name: well.name,
+      onClick: () => {
+        if (isWellboresView) return;
+        navigate(getWellboresViewPath(serverUrl, well.uid));
       }
+    }
     : {};
 };
 
@@ -218,14 +218,14 @@ const getWellboreCrumb = (
 ) => {
   return serverUrl && wellbore
     ? {
-        name: wellbore.name,
-        onClick: () => {
-          if (isObjectGroupsView) return;
-          navigate(
-            getObjectGroupsViewPath(serverUrl, wellbore.wellUid, wellbore.uid)
-          );
-        }
+      name: wellbore.name,
+      onClick: () => {
+        if (isObjectGroupsView) return;
+        navigate(
+          getObjectGroupsViewPath(serverUrl, wellbore.wellUid, wellbore.uid)
+        );
       }
+    }
     : {};
 };
 
@@ -239,26 +239,26 @@ const getObjectGroupCrumb = (
 ) => {
   return serverUrl && wellbore && objectGroup
     ? {
-        name: pluralizeObjectType(objectGroup as ObjectType),
-        onClick: () => {
-          if (isObjectsView || isLogTypesView) return;
-          navigate(
-            objectGroup === ObjectType.Log
-              ? getLogTypesViewPath(
-                  serverUrl,
-                  wellbore.wellUid,
-                  wellbore.uid,
-                  objectGroup
-                )
-              : getObjectsViewPath(
-                  serverUrl,
-                  wellbore.wellUid,
-                  wellbore.uid,
-                  objectGroup
-                )
-          );
-        }
+      name: pluralizeObjectType(objectGroup as ObjectType),
+      onClick: () => {
+        if (isObjectsView || isLogTypesView) return;
+        navigate(
+          objectGroup === ObjectType.Log
+            ? getLogTypesViewPath(
+              serverUrl,
+              wellbore.wellUid,
+              wellbore.uid,
+              objectGroup
+            )
+            : getObjectsViewPath(
+              serverUrl,
+              wellbore.wellUid,
+              wellbore.uid,
+              objectGroup
+            )
+        );
       }
+    }
     : {};
 };
 
@@ -271,20 +271,20 @@ const getLogTypeCrumb = (
 ) => {
   return serverUrl && wellbore && logType
     ? {
-        name: capitalize(logType),
-        onClick: () => {
-          if (isLogObjectsView) return;
-          navigate(
-            getLogObjectsViewPath(
-              serverUrl,
-              wellbore.wellUid,
-              wellbore.uid,
-              ObjectType.Log,
-              logType
-            )
-          );
-        }
+      name: capitalize(logType),
+      onClick: () => {
+        if (isLogObjectsView) return;
+        navigate(
+          getLogObjectsViewPath(
+            serverUrl,
+            wellbore.wellUid,
+            wellbore.uid,
+            ObjectType.Log,
+            logType
+          )
+        );
       }
+    }
     : {};
 };
 
@@ -299,29 +299,29 @@ function getObjectCrumb<T extends ObjectType>(
 ) {
   return serverUrl && objectGroup && object
     ? {
-        name: object.name,
-        onClick: () => {
-          if (isObjectView || isLogObjectView) return;
-          navigate(
-            logType
-              ? getLogObjectViewPath(
-                  serverUrl,
-                  object.wellUid,
-                  object.wellboreUid,
-                  objectGroup,
-                  logType,
-                  object.uid
-                )
-              : getObjectViewPath(
-                  serverUrl,
-                  object.wellUid,
-                  object.wellboreUid,
-                  objectGroup,
-                  object.uid
-                )
-          );
-        }
+      name: object.name,
+      onClick: () => {
+        if (isObjectView || isLogObjectView) return;
+        navigate(
+          logType
+            ? getLogObjectViewPath(
+              serverUrl,
+              object.wellUid,
+              object.wellboreUid,
+              objectGroup,
+              logType,
+              object.uid
+            )
+            : getObjectViewPath(
+              serverUrl,
+              object.wellUid,
+              object.wellboreUid,
+              objectGroup,
+              object.uid
+            )
+        );
       }
+    }
     : {};
 }
 
@@ -350,21 +350,21 @@ const getMultiLogsCurveInfoListCrumb = (
   }
   return isMultiLogsCurveInfoListView || isMultiLogCurveValuesView
     ? {
-        name: "Multiple logs",
-        onClick: () => {
-          if (isMultiLogsCurveInfoListView || !newSearchParams) return;
-          navigate({
-            pathname: getMultiLogCurveInfoListViewPath(
-              serverUrl,
-              wellbore.wellUid,
-              wellbore.uid,
-              objectGroup,
-              logType
-            ),
-            search: newSearchParams.toString()
-          });
-        }
+      name: "Multiple logs",
+      onClick: () => {
+        if (isMultiLogsCurveInfoListView || !newSearchParams) return;
+        navigate({
+          pathname: getMultiLogCurveInfoListViewPath(
+            serverUrl,
+            wellbore.wellUid,
+            wellbore.uid,
+            objectGroup,
+            logType
+          ),
+          search: newSearchParams.toString()
+        });
       }
+    }
     : {};
 };
 
@@ -375,24 +375,24 @@ const getMultiLogCurveValuesCrumb = (isMultiLogCurveValuesView: boolean) => {
 const getJobsCrumb = (isJobsView: boolean) => {
   return isJobsView
     ? {
-        name: "Jobs"
-      }
+      name: "Jobs"
+    }
     : {};
 };
 
 const getQueryCrumb = (isQueryView: boolean) => {
   return isQueryView
     ? {
-        name: "Query"
-      }
+      name: "Query"
+    }
     : {};
 };
 
 const getSearchCrumb = (isSearchView: boolean) => {
   return isSearchView
     ? {
-        name: "Search"
-      }
+      name: "Search"
+    }
     : {};
 };
 
@@ -400,7 +400,7 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
 `;
 
-const StyledBreadcrumbs = styled(EdsBreadcrumbs)<{ $isCompact: boolean }>`
+const StyledBreadcrumbs = styled(EdsBreadcrumbs) <{ $isCompact: boolean }>`
   overflow: clip;
   display: flex;
   justify-content: flex-start;
