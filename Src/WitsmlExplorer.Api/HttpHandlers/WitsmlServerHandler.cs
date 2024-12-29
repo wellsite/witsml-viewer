@@ -80,17 +80,24 @@ namespace WitsmlExplorer.Api.HttpHandlers
 
             EssentialHeaders httpHeaders = new(httpContext?.Request);
             string roles = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "roles");
+            string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
+            var existingServer = await witsmlServerRepository.GetDocumentAsync(witsmlServerId);
             if (roles.Contains("user"))
             {
-                string email = credentialsService.GetClaimFromToken(httpHeaders.GetBearerToken(), "email");
-                await witsmlServerRepository.DeleteDocumentAsync(email);
-                return TypedResults.NoContent();
+                if (email == existingServer.Email)
+                {
+                    await witsmlServerRepository.DeleteDocumentAsync(witsmlServerId);
+                }
+                else
+                {
+                    return TypedResults.Unauthorized();
+                }
             }
             else
             {
                 await witsmlServerRepository.DeleteDocumentAsync(witsmlServerId);
-                return TypedResults.NoContent();
             }
+            return TypedResults.NoContent();
         }
     }
 }
